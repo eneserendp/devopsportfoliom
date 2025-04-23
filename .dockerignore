@@ -1,0 +1,32 @@
+# Versioning and metadata
+.git
+.gitignore
+.dockerignore
+
+# Build dependencies
+dist
+node_modules
+coverage
+
+# Environment (contains sensitive data)
+.env
+.env.*
+
+# Files not required for production
+README.md
+CHANGELOG.md
+docker-compose.yml
+Dockerfile
+Dockerfile.dev
+.editorconfig
+.eslintrc.json
+.prettierrc
+.prettierignore
+.github
+.husky
+.storybook
+*.log
+
+# Next.js build output
+.next
+out 

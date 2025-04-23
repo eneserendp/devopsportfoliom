@@ -1,0 +1,16 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the port Next.js runs on
+EXPOSE 3000
+
+# The development server with hot reloading
+CMD ["npm", "run", "dev"] 
