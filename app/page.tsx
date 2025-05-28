@@ -46,7 +46,7 @@ export default function Home() {
                 <span className="text-[#4A9EFF] text-[28px] sm:text-[32px] md:text-[40px] font-extrabold md:ml-4 drop-shadow-lg">
                   <TypeAnimation
                     sequence={[
-                      'Enes Eren Demirpolattt',
+                      'Enes Eren Demirpolat',
                       2000,
                       'DevOps Mühendisi',
                       2000,
