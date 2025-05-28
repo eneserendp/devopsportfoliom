@@ -20,6 +20,13 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
         // Komut işleme
         if (newCommand.toLowerCase() === 'clear') {
           setOutput([]);
+        } else if (newCommand.toLowerCase() === 'help') {
+          setOutput((prev) => [
+            ...prev,
+            'Available commands:',
+            '- help: Show this help message',
+            '- clear: Clear the terminal',
+          ]);
         } else {
           setOutput((prev) => [...prev, `Command executed: ${newCommand}`]);
         }
@@ -33,20 +40,9 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center"
     >
-      <div
-        className="bg-[#1e1e1e] w-[800px] h-[500px] rounded-lg shadow-2xl flex flex-col"
-        style={{
-          animation: 'fadeIn 0.3s ease-out',
-          margin: '0 auto',
-        }}
-      >
+      <div className="bg-[#1e1e1e] w-[800px] h-[500px] rounded-lg shadow-2xl flex flex-col animate-fadeIn">
         {/* Terminal Header */}
         <div className="bg-[#2d2d2d] px-4 py-3 flex justify-between items-center rounded-t-lg border-b border-gray-700">
           <div className="flex items-center gap-2">
@@ -85,7 +81,7 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
               type="text"
               value={command}
               onChange={(e) => setCommand(e.target.value)}
-              onKeyPress={handleCommand}
+              onKeyDown={handleCommand}
               className="flex-1 bg-transparent text-white outline-none text-sm"
               placeholder="Type a command..."
               autoFocus
