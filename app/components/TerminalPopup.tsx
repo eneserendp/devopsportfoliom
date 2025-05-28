@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface TerminalPopupProps {
   isOpen: boolean;
@@ -10,29 +10,42 @@ interface TerminalPopupProps {
 export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
   const [command, setCommand] = useState('');
   const [output, setOutput] = useState<string[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setOutput([
+        "Welcome to the terminal! Type 'help' for available commands."
+      ]);
+      setCommand('');
+      inputRef.current?.focus();
+    }
+  }, [isOpen]);
 
   const handleCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const newCommand = command.trim();
-      if (newCommand) {
-        setOutput((prev) => [...prev, `$ ${newCommand}`]);
+      if (!newCommand) return;
 
-        // Komut işleme
-        if (newCommand.toLowerCase() === 'clear') {
-          setOutput([]);
-        } else if (newCommand.toLowerCase() === 'help') {
-          setOutput((prev) => [
-            ...prev,
-            'Available commands:',
-            '- help: Show this help message',
-            '- clear: Clear the terminal',
-          ]);
-        } else {
-          setOutput((prev) => [...prev, `Command executed: ${newCommand}`]);
-        }
-
-        setCommand('');
+      if (newCommand.toLowerCase() === 'clear') {
+        setOutput([]);
+      } else if (newCommand.toLowerCase() === 'help') {
+        setOutput((prev) => [
+          ...prev,
+          `$ ${newCommand}`,
+          'Available commands:',
+          '- help: Show this help message',
+          '- clear: Clear the terminal',
+        ]);
+      } else {
+        setOutput((prev) => [
+          ...prev,
+          `$ ${newCommand}`,
+          `Command executed: ${newCommand}`,
+        ]);
       }
+
+      setCommand('');
     }
   };
 
@@ -64,9 +77,6 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
         {/* Terminal Content */}
         <div className="flex-1 p-6 flex flex-col bg-[#1e1e1e]">
           <div className="flex-1 overflow-y-auto font-mono text-sm text-white mb-4 space-y-2">
-            <div className="text-green-400 mb-4">
-              Welcome to the terminal! Type 'help' for available commands.
-            </div>
             {output.map((line, index) => (
               <div key={index} className="leading-relaxed">
                 {line}
@@ -78,6 +88,7 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
           <div className="flex items-center gap-2 font-mono">
             <span className="text-green-500">$</span>
             <input
+              ref={inputRef}
               type="text"
               value={command}
               onChange={(e) => setCommand(e.target.value)}
@@ -85,6 +96,8 @@ export default function TerminalPopup({ isOpen, onClose }: TerminalPopupProps) {
               className="flex-1 bg-transparent text-white outline-none text-sm"
               placeholder="Type a command..."
               autoFocus
+              spellCheck={false}
+              autoComplete="off"
             />
           </div>
         </div>
